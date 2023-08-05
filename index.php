@@ -126,6 +126,39 @@ $app->patch('/api/post/update_title/{id}', function (Request $request, Response 
     }
 });
 
+// Définition d'une route pour ajouter un article
+$app->post('/api/post/create', function (Request $request, Response $response, $args) use ($db) {
+
+    // Récupération des données
+    $data = $request->getParsedBody();
+    $category_id = $data['category_id'] ?? '';
+    $title = $data['title'] ?? '';
+    $body = $data['body'] ?? '';
+    $author = $data['author'] ?? '';
+    $create_at = date("Y-m-d H:i:s");
+
+    // Instantiation du modèle Post en passant la connexion à la base de données
+    $post = new Post($db);
+
+    // Create the post
+    if ($post->create($category_id, $title, $body, $author, $create_at)) {
+        // Return a success JSON response
+        $data = ['message' => 'Post create successfully'];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    } else {
+        // Return an error JSON response
+        $data = ['message' => 'Failed to create post'];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(500);
+    }
+});
+
+// Définition d'une réponse si la route n'existe pas
+$app->map(['GET', 'POST', 'PATCH', 'PUT', 'DELETE'], '/{routes:.+}', function (Request $request, Response $response) {
+    $response->getBody()->write("404 Not Found");
+    return $response->withStatus(404);
+});
 
 // Run the Slim app
 $app->run();

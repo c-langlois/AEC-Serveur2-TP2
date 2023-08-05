@@ -105,4 +105,28 @@ class Post
             return false;
         }
     }
+
+
+    public function create($category_id, $title, $body, $author, $created_at)
+    {
+        // Create query
+        $query = 'INSERT INTO ' . $this->table . '(category_id, title, body, author, created_at) VALUES (:category_id, :title, :body, :author, :created_at)';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':body', $body);
+        $stmt->bindParam(':author', $author);
+        $stmt->bindParam(':created_at', $created_at);
+
+        // Execute query
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

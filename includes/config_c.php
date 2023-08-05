@@ -1,7 +1,7 @@
 <?php
 //Sert à faire la connexion à la base de données
-$db_user = 'mdkxfcfdmp';
-$db_password = '42VSP3CQ0R6Z60U8';
+$db_user = 'root';
+$db_password = 'Pmcq2929';
 $db_name = 'test_tp2_serveur2';
 
 $db = new PDO('mysql:host=mysql; dbname=' . $db_name . ';charset=utf8', $db_user, $db_password);
